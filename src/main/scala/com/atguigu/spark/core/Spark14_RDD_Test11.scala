@@ -1,0 +1,24 @@
+package com.atguigu.spark.core
+
+import org.apache.spark.{SparkConf, SparkContext}
+
+/**
+  * @Author: lenovo
+  * @Time: 2020/6/4 9:56
+  * @Description:
+  * @Modified By: lenovo
+  */
+object Spark14_RDD_Test11 {
+  def main(args: Array[String]): Unit = {
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("File - RDD")
+    val sc = new SparkContext(sparkConf)
+    val rdd = sc.makeRDD(List(1,3,6,2,5,4),2)
+    // 获取每个数据分区的最大值
+    val rdd1 = rdd.mapPartitions(iter => {
+      List(iter.max).toIterator
+    })
+    println(rdd1.collect().mkString(","))
+
+    sc.stop()
+  }
+}
